@@ -1,0 +1,3 @@
+[{"pk": 1, "model": "contact.person",
+    "fields": {"bio": "Some bio of mine", "surname": "Krakovyan", "name": "Max", "contacts": "Some other contacts",
+        "birth": "1988-03-05", "skype": "mkrakovyan", "jabber": "mk@42cc.co", "email": "max.krakovyan@gmail.com"}}]
