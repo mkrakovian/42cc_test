@@ -16,5 +16,5 @@ class HomeViewTest(TestCase):
         # TODO: using the protected _meta, need to find another solution perhaps.
 
         for field in person._meta.fields:
-            if field.name != 'id':
+            if field.name != 'id' and field.name != 'birth':
                 self.assertContains(response, person.__getattribute__(field.name))
