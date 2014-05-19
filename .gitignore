@@ -1,6 +1,7 @@
-# Ignoring environmental and pycharm setups
+# Ignoring environmental and pycharm setups + sqlite3 db
 42ccenv/
 .idea/
+*.sqlite3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

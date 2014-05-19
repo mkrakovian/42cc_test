@@ -1,0 +1,20 @@
+{% extends 'contact/base.html' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+    <div id="left">
+        <p>Name: {{ person.name }}</p>
+        <p>Last Name: {{ person.surname }}</p>
+        <p>Date of birth: {{ person.birth|date }}</p>
+        <p>Bio: {{ person.bio }}</p>
+    </div>
+
+    <div id="right">
+        <h2>Contacts</h2>
+        <p>Skype: {{ person.skype }}</p>
+        <p>Email: {{ person.email }}</p>
+        <p>Jabber ID: {{ person.jabber }}</p>
+        <p>Other contacts: {{ person.contacts }}</p>
+    </div>
+{% endblock %}
