@@ -1,3 +1,8 @@
 [{"pk": 1, "model": "contact.person",
     "fields": {"bio": "Some bio of mine", "surname": "Krakovyan", "name": "Max", "contacts": "Some other contacts",
-        "birth": "1988-03-05", "skype": "mkrakovyan", "jabber": "mk@42cc.co", "email": "max.krakovyan@gmail.com"}}]
+        "birth": "1988-03-05", "skype": "mkrakovyan", "jabber": "mk@42cc.co", "email": "max.krakovyan@gmail.com"}},
+    {"pk": 1, "model": "auth.user",
+        "fields": {"username": "admin", "first_name": "", "last_name": "", "is_active": true, "is_superuser": true,
+            "is_staff": true, "last_login": "2014-05-14T15:27:11.534Z", "groups": [], "user_permissions": [],
+            "password": "pbkdf2_sha256$12000$Edvsk3eSgCQb$iHFxtYz+Eh9AgsV4EIq3R2ctOjfJ8iiYOqyi33pss28=", "email": "",
+            "date_joined": "2014-05-14T13:55:00.552Z"}}]
