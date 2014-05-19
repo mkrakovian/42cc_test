@@ -17,4 +17,6 @@
         <p>Jabber ID: {{ person.jabber }}</p>
         <p>Other contacts: {{ person.contacts }}</p>
     </div>
+    <hr>
+    <a href="{% url 'contact:requests' %}">Requests</a>
 {% endblock %}
