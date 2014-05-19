@@ -18,10 +18,12 @@ class HomeViewTest(TestCase):
         # TODO: using the protected _meta, need to find another solution perhaps.
 
         for field in person._meta.fields:
-            value = person.__getattribute__(field.name)
+            value = getattr(person, field.name)
             if type(value) == datetime.date:
-                formatting = settings.DATE_FORMAT.replace('N ', '%B').replace('j', '%e').replace('Y', '%Y')
-                self.assertContains(response, value.strftime(formatting))
+                formatting = settings.DATE_FORMAT.replace('N', '%B').replace('j', '%d').replace('Y', '%Y')
+                birth = value.strftime(formatting).split()
+                birth[1] = birth[1].lstrip('0')
+                self.assertContains(response, ' '.join(birth))
                 pass
             elif field.name != 'id':
                 self.assertContains(response, value)
