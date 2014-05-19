@@ -13,3 +13,14 @@ class Person(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.name, self.surname)
+
+
+class Request(models.Model):
+    path = models.TextField('path')
+    method = models.CharField('method', max_length=15)
+    encoding = models.CharField('encoding', max_length=25)
+    user_agent = models.TextField("client's user agent")
+    ip = models.CharField("client's IP address", max_length=20)
+
+    def __unicode__(self):
+        return self.ip

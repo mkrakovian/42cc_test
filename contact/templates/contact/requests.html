@@ -1,0 +1,17 @@
+{% extends 'contact/base.html' %}
+
+{% block title %}Requests{% endblock %}
+{% block content %}
+    <ul>
+        {% for request in first_req_list %}
+            <li>
+                <p>Request #: {{ request.id }}</p>
+                <p>Request path: {{ request.path }}</p>
+                <p>Request encoding: {{ request.encoding }}</p>
+                <p>Request method: {{ request.method }}</p>
+                <p>Client's user agent: {{ request.user_agent }}</p>
+                <p>Client's IP address: {{ request.user_agent }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
