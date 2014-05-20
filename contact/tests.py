@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from models import Person
+from models import Person, Request
 from django.conf import settings
 import datetime
 
@@ -26,4 +26,35 @@ class HomeViewTest(TestCase):
                 self.assertContains(response, ' '.join(birth))
                 pass
             elif field.name != 'id':
+                self.assertContains(response, value)
+
+
+class RequestListViewTest(TestCase):
+    def setUp(self):
+        middleware_path = 'contact.middleware.RequestSaveMiddleware'
+        if middleware_path not in settings.MIDDLEWARE_CLASSES:
+            print "NOTE: Ur %s is unplugged" % middleware_path
+            settings.MIDDLEWARE_CLASSES = (middleware_path,) + settings.MIDDLEWARE_CLASSES
+
+    def test_requests_saved(self):
+        requests = Request.objects.order_by('id')
+
+        for i in range(10):
+            self.client.get(reverse('contact:home'), {'q': 'some search param'})
+        response = self.client.get(reverse('contact:requests'))
+        self.assertEqual(response.status_code, 200)
+        if not requests:
+            self.fail()
+        self.assertQuerysetEqual(response.context['first_req_list'], map(repr, requests[:10]))
+
+    def test_info_presented(self):
+        for i in range(10):
+            self.client.get(reverse('contact:home'), {'q': 'some search param'})
+        response = self.client.get(reverse('contact:requests'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.count('Request method'), 10)
+
+        for request in Request.objects.order_by('id')[:10]:
+            for field in request._meta.fields:
+                value = getattr(request, field.name)
                 self.assertContains(response, value)
