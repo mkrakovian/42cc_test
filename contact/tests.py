@@ -58,3 +58,15 @@ class RequestListViewTest(TestCase):
             for field in request._meta.fields:
                 value = getattr(request, field.name)
                 self.assertContains(response, value)
+
+
+class SettingsContextProcessorTest(TestCase):
+    def test_processor(self):
+        response = self.client.get('/')
+        settings_attributes = [attr for attr in dir(settings) if '__' not in attr]
+
+        # Check if settings were added into context
+        self.assertIn('project_settings', response.context)
+        # Check if settings in the context are our project's settings and they haven't been overridden
+        for attr in settings_attributes:
+            self.assertEqual(getattr(response.context['project_settings'], attr), getattr(settings, attr))
