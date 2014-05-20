@@ -30,6 +30,12 @@ class HomeViewTest(TestCase):
 
 
 class RequestListViewTest(TestCase):
+    def setUp(self):
+        middleware_path = 'contact.middleware.RequestSaveMiddleware'
+        if middleware_path not in settings.MIDDLEWARE_CLASSES:
+            print "NOTE: Ur %s is unplugged" % middleware_path
+            settings.MIDDLEWARE_CLASSES = (middleware_path,) + settings.MIDDLEWARE_CLASSES
+
     def test_requests_saved(self):
         requests = Request.objects.order_by('id')
 
