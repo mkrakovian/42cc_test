@@ -33,7 +33,8 @@ class RequestListViewTest(TestCase):
     def setUp(self):
         middleware_path = 'contact.middleware.RequestSaveMiddleware'
         if middleware_path not in settings.MIDDLEWARE_CLASSES:
-            print "NOTE: Ur %s is unplugged" % middleware_path
+            print "NOTE: Ur %s is unplugged." % middleware_path
+            print "Plugging it in for the tests."
             settings.MIDDLEWARE_CLASSES = (middleware_path,) + settings.MIDDLEWARE_CLASSES
 
     def test_requests_saved(self):
@@ -61,6 +62,12 @@ class RequestListViewTest(TestCase):
 
 
 class SettingsContextProcessorTest(TestCase):
+    def setUp(self):
+        context_processor_path = "contact.context_processors.add_settings"
+        if context_processor_path not in settings.TEMPLATE_CONTEXT_PROCESSORS:
+            self.skipTest('Ur template context processor %s is unplugged.\nPlug it in for testing'
+                          % context_processor_path)
+
     def test_processor(self):
         response = self.client.get('/')
         settings_attributes = [attr for attr in dir(settings) if '__' not in attr]
