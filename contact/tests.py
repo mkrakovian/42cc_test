@@ -1,10 +1,13 @@
 from django.test import TestCase
+from django.db.models import get_models
 from django.template import Template, Context
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
+from django.core.management import call_command
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from models import Person, Request
+from StringIO import StringIO
 import datetime
 
 
@@ -79,3 +82,19 @@ class EditLinkTagTest(TestCase):
         model = person._meta.model_name
 
         self.assertContains(response, reverse("admin:%s_%s_change" % (app, model), args=(person.pk,)))
+
+
+class CountModelObjectsCommandTest(TestCase):
+    fixtures = ['initial_data']
+
+    def setUp(self):
+        self.out = StringIO()
+        self.err = StringIO()
+
+    def test_command(self):
+        call_command('count_model_objects', stdout=self.out, stderr=self.err)
+        for model in get_models(include_auto_created=True):
+            self.out.seek(0)
+            self.assertIn(model._meta.model_name.capitalize(), self.out.read())
+            self.out.seek(0)
+            self.assertIn(str(model._default_manager.count()), self.out.read())
