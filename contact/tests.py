@@ -1,8 +1,10 @@
 from django.test import TestCase
+from django.template import Template, Context
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from models import Person, Request
 from django.conf import settings
+from models import Person, Request
 import datetime
 
 
@@ -58,3 +60,22 @@ class RequestListViewTest(TestCase):
             for field in request._meta.fields:
                 value = getattr(request, field.name)
                 self.assertContains(response, value)
+
+
+class EditLinkTagTest(TestCase):
+    fixtures = ['initial_data']
+
+    def test_tag_works(self):
+        person = get_object_or_404(Person, pk=1)
+        page = """
+        <html>
+        {% load edit_extras %}
+        {% edit_link person %}
+        </html>"""
+        t = Template(page)
+        c = Context({'person': person})
+        response = HttpResponse(t.render(c))
+        app = person._meta.app_label
+        model = person._meta.model_name
+
+        self.assertContains(response, reverse("admin:%s_%s_change" % (app, model), args=(person.pk,)))
