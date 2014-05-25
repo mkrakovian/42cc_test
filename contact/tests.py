@@ -6,7 +6,8 @@ from django.core.urlresolvers import reverse
 from django.core.management import call_command
 from django.shortcuts import get_object_or_404
 from django.conf import settings
-from models import Person, Request
+from django.utils import timezone
+from models import Person, Request, Log
 from StringIO import StringIO
 import datetime
 
@@ -98,3 +99,35 @@ class CountModelObjectsCommandTest(TestCase):
             self.assertIn(model._meta.model_name.capitalize(), self.out.read())
             self.out.seek(0)
             self.assertIn(str(model._default_manager.count()), self.out.read())
+
+
+class InsertLogSignalTest(TestCase):
+    def setUp(self):
+        self.p = Person.objects.create(
+            name='Test name',
+            surname="Surname",
+            birth=timezone.now(),
+            bio="Bio",
+            email="test@gmail.com",
+            skype="test",
+            jabber="test@42cc.co",
+            contacts="test"
+        )
+
+    def test_log_created_action(self):
+        log = Log.objects.get(pk=1)
+        self.assertEqual(len(Log.objects.all()), 1)
+        self.assertEqual(log.action, 'created')
+
+    def test_log_changed_action(self):
+        self.p.bio = 'new'
+        self.p.save()
+        log = Log.objects.get(pk=2)
+        self.assertEqual(len(Log.objects.all()), 2)
+        self.assertEqual(log.action, 'changed')
+
+    def test_log_deleted_action(self):
+        self.p.delete()
+        log = Log.objects.get(pk=2)
+        self.assertEqual(len(Log.objects.all()), 2)
+        self.assertEqual(log.action, 'deleted')
