@@ -1,5 +1,42 @@
-div {
+* {
+    font-family: Tahoma, Verdana, sans-serif;
+}
+#left {
     display: inline-block;
-    padding: 5px 20px 5px 5px;
+    padding: 10px 10px 5px 5px;
+    width: 300px;
+}
+#right {
+    display: inline-block;
+    position: relative;
+    padding: 5px 5px 5px 10px;
+    float: right;
+    width: 560px;
 
+}
+.errorlist {
+    color: red;
+}
+#thumb {
+    width:300px;
+    height:200px;
+}
+#thumb img {
+    height:100%;
+    width:100%;
+    margin:0 auto;
+}
+.contacts {
+    width: 960px;
+}
+.links {
+    display: inline-block;
+    height: 50px;
+    width: 300px;
+    position: absolute;
+    float: right;
+
+}
+.links p {
+    display: inline-block;
 }

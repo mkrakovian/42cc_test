@@ -2,6 +2,10 @@
 42ccenv/
 .idea/
 *.sqlite3
+build/
+
+# Ignoring files in MEDIA_ROOT
+media_files/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

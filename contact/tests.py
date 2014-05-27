@@ -21,7 +21,6 @@ class HomeViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Cycle through all the person's fields to check if their values are present on the page.
-        # TODO: using the protected _meta, need to find another solution perhaps.
 
         for field in person._meta.fields:
             value = getattr(person, field.name)
@@ -131,3 +130,20 @@ class InsertLogSignalTest(TestCase):
         log = Log.objects.get(pk=2)
         self.assertEqual(len(Log.objects.all()), 2)
         self.assertEqual(log.action, 'deleted')
+
+
+class AuthTest(TestCase):
+    fixtures = ['initial_data']
+
+    def setUp(self):
+        self.p = Person.objects.get(pk=1)
+
+    def test_not_auth_user(self):
+        response = self.client.get(reverse('contact:edit', args=(self.p.id,)))
+        self.assertEqual(response.status_code, 302)
+
+    def test_auth_user(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.get(reverse('contact:edit', args=(self.p.id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Save changes')

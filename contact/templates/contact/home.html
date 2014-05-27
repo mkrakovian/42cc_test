@@ -4,11 +4,19 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
+    <div class="contacts">
     <div id="left">
         <p>Name: {{ person.name }}</p>
         <p>Last Name: {{ person.surname }}</p>
         <p>Date of birth: {{ person.birth|date }}</p>
         <p>Bio: {{ person.bio }}</p>
+        <p>Photo:
+            {% if person.pic %}
+                <div id="thumb"><img src="{{ person.pic.url }}" /></div>
+            {% else %}
+                <div id="thumb">No photo yet.</div>
+            {% endif %}
+        </p>
     </div>
 
     <div id="right">
@@ -17,10 +25,18 @@
         <p>Email: {{ person.email }}</p>
         <p>Jabber ID: {{ person.jabber }}</p>
         <p>Other contacts: {{ person.contacts }}</p>
+        <div class="links">
+            {% if user.is_authenticated %}
+                <p><a href="{% url 'contact:edit' person.id %}">Edit</a></p>
+                <p><a href="{% url 'contact:logout' %}">Log out, {{ user.username }}</a></p>
+            {% else %}
+                <p><a href="{% url 'contact:login' %}">Log in</a></p>
+            {% endif %}
+            <a href="{% edit_link person %}">Admin edit page</a>
+        </div>
     </div>
 
-    <div id="links">
-        <a href="{% edit_link person %}">Admin edit page</a>
+
     </div>
 
     <hr>

@@ -33,6 +33,7 @@ class Person(BaseLogModel):
     name = models.CharField('Name', max_length=30)
     surname = models.CharField('Last Name', max_length=30)
     birth = models.DateField('Date of Birth')
+    pic = models.ImageField('photo', upload_to='person', blank=True, null=True)
     bio = models.TextField('Biography')
     skype = models.CharField('Skype ID', max_length=15)
     jabber = models.EmailField('Jabber ID')
@@ -41,6 +42,16 @@ class Person(BaseLogModel):
 
     def __unicode__(self):
         return '%s %s' % (self.name, self.surname)
+
+    def save(self, *args, **kwargs):
+        # delete old file when replacing by updating the pic field
+        try:
+            other = Person.objects.get(pk=self.pk)
+            if other.pic != self.pic:
+                other.pic.delete(save=False)
+        except:
+            pass  # when a new photo nothing is done, normal case
+        super(Person, self).save(*args, **kwargs)
 
 
 class Request(BaseLogModel):
@@ -81,3 +92,7 @@ def logger(sender, **kwargs):
 # for sender in [model for model in get_models(get_app('contact')) if issubclass(model, BaseLogModel)]:
 #     insert_log.connect(logger, sender=sender)
 #     post_delete.connect(logger, sender=sender)
+
+@receiver(post_delete, sender=Person)
+def person_pic_delete(sender, instance, **kwargs):
+    instance.pic.delete(False)

@@ -1,0 +1,25 @@
+{% extends 'contact/base.html' %}
+
+{% block title %}Edit {{ object }}{% endblock %}
+
+{% block content %}
+    <h1>Edit {{ object }}</h1>
+    <form action="{% url 'contact:edit' object.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form.visible_fields %}
+            <p>
+                {{ field.errors }}
+                {{ field.help_text }}
+                <b>{{ field.name|capfirst }}:</b> {{ field }}
+                 {% if field.name == 'pic' and form.instance.pic %}
+                     <div id="thumb">
+                     <img src="{{ form.instance.pic.url }}" />
+                     </div>
+                 {% endif %}
+            </p>
+        {% endfor %}
+        </div>
+        <input type="submit" value="Save changes">
+        <a href="{% url 'contact:home' %}"><button type="button">Cancel</button></a>
+    </form>
+{% endblock %}
